@@ -1,0 +1,24 @@
+{% extends 'movies/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card p-4 shadow-lg">
+        <h1 class="text-center mb-4">❌ Delete Memory</h1>
+        
+        <p><strong>Title:</strong> {{ memory.note_title }}</p>
+        <p><strong>Body:</strong> {{ memory.note_body }}</p>
+        <p><strong>To be unlocked on:</strong> {{ memory.unlock_on }}</p>
+
+        {% if memory.movie %}
+            <p><strong>🎬 Related Movie:</strong> {{ memory.movie.title }}</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger w-100">Yes, Delete</button>
+        </form>
+
+        <a href="{% url 'home' %}" class="d-block text-center mt-3">← Cancel</a>
+    </div>
+</div>
+{% endblock %}

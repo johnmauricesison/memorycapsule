@@ -1,0 +1,64 @@
+{% extends "movies/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">📜 Your Memory Capsules</h1>
+    <a href="{% url 'add_memory' %}" class="btn btn-dark mb-4">➕ Add New Memory</a>
+
+    {% if notes %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for note in notes %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    {% if note.movie and note.movie.poster %}
+                    <img src="{{ note.movie.poster.url }}" class="card-img-top" alt="{{ note.movie.title }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ note.note_title }}</h5>
+
+                        {% if note.is_opened %}
+                            <p class="card-text">{{ note.note_body|truncatewords:20 }}</p>
+                        {% else %}
+                            <p class="text-muted fst-italic">🔒 Memory is locked until {{ note.unlock_on }}</p>
+                        {% endif %}
+
+                        {% if note.movie %}
+                        <p class="mb-2">
+                            🎬 <strong>Related Movie:</strong> {{ note.movie.title }}
+                        </p>
+                        {% endif %}
+
+                        <p class="text-muted mb-2">
+                            <strong>Unlock Date:</strong> {{ note.unlock_on }}
+                        </p>
+
+                        {% if note.is_opened %}
+                        <span class="badge bg-success mb-2">Unlocked</span>
+                        {% else %}
+                        <span class="badge bg-secondary mb-2">Locked</span>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between">
+                          {% if note.is_opened %}
+                              <a href="{% url 'memory_detail' note.id %}" class="btn btn-outline-success btn-sm">📖 View</a>
+                          {% else %}
+                              <button class="btn btn-outline-secondary btn-sm" disabled>🔒 Locked</button>
+                          {% endif %}
+
+                          {% if note.is_opened %}
+                              <a href="{% url 'edit_memory' note.id %}" class="btn btn-outline-primary btn-sm">✏️ Edit</a>
+                          {% endif %}
+                          
+                          <a href="{% url 'delete_memory' note.id %}" class="btn btn-outline-danger btn-sm">🗑️ Delete</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No memories yet! <a href="{% url 'add_memory' %}">Add a new memory</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

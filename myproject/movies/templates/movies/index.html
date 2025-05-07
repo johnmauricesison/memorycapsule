@@ -1,0 +1,8 @@
+{% extends 'movies/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Welcome to MovieBox</h1>
+    <form method="get" action="/search/" class="mt-4">
+        <input type="text" name="q" class="form-control" placeholder="Search movies...">
+    </form>
+{% endblock %}

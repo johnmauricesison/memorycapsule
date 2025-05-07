@@ -1,0 +1,42 @@
+{% extends 'movies/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card p-4 shadow-lg">
+        <h1 class="text-center mb-4">➕ Add New Memory</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="note_title" class="form-label">{{ form.note_title.label }}</label>
+                <input type="text" name="note_title" class="form-control" value="{{ form.note_title.value }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="note_body" class="form-label">{{ form.note_body.label }}</label>
+                <textarea name="note_body" class="form-control">{{ form.note_body.value }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="unlock_on" class="form-label">{{ form.unlock_on.label }}</label>
+                <input type="date" name="unlock_on" class="form-control" value="{{ form.unlock_on.value }}" min="{{ today }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="movie" class="form-label">Pick a Movie(optional):</label>
+                <select name="movie" id="movie" class="form-select">
+                    <option value="">None</option>
+                    {% for movie in movies %}
+                        <option value="{{ movie.id }}">{{ movie.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">💾 Save Memory</button>
+        </form>
+
+        <a href="{% url 'home' %}" class="d-block text-center mt-3">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

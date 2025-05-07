@@ -1,0 +1,208 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard | Movie Review Site{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body">
+                <h1 class="card-title text-left mb-4">My Dashboard</h1>
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="stats-card p-3 bg-light rounded">
+                            <div class="stats-icon mb-2">
+                                <i class="fa-solid fa-film fa-2x" style="color: #ff007b;"></i>
+                            </div>
+                            <h3>{{ total_movies }}</h3>
+                            <p class="mb-0 text-muted">Total Movies</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card p-3 bg-light rounded">
+                            <div class="stats-icon mb-2">
+                                <i class="fas fa-eye fa-2x text-primary"></i>
+                            </div>
+                            <h3>{{ user_stats.watched_count }}</h3>
+                            <p class="mb-0 text-muted">Watched</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card p-3 bg-light rounded">
+                            <div class="stats-icon mb-2">
+                                <i class="fas fa-list fa-2x text-warning"></i>
+                            </div>
+                            <h3>{{ user_stats.watchlist_count }}</h3>
+                            <p class="mb-0 text-muted">Watchlist</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card p-3 bg-light rounded">
+                            <div class="stats-icon mb-2">
+                                <i class="fas fa-heart fa-2x text-danger"></i>
+                            </div>
+                            <h3>{{ user_stats.liked_count }}</h3>
+                            <p class="mb-0 text-muted">Liked</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recently Added Movies -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body">
+                <h2 class="card-title">Recently Added</h2>
+                <div class="row">
+                    {% for movie in recently_added %}
+                        <div class="col-md-2 mb-3">
+                            <div class="card h-100">
+                                {% if movie.poster %}
+                                    <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                                {% else %}
+                                    <div class="card-img-top movie-placeholder-img bg-light text-center py-5">
+                                        <i class="fas fa-film fa-3x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-2">
+                                    <h6 class="card-title text-truncate" title="{{ movie.title }}">{{ movie.title }}</h6>
+                                    <p class="card-text small text-muted mb-0">{{ movie.release_year }}</p>
+                                    <div class="mt-2">
+                                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-sm btn-outline-primary w-100" >View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted">No movies added yet.</p>
+                        </div>
+                    {% endfor %}
+                    <hr style="color: rgb(192, 192, 192);">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Your Watchlist -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body">
+                <h2 class="card-title">Your Watchlist</h2>
+                <div class="row">
+                    {% for movie in watchlist_movies %}
+                        <div class="col-md-2 mb-3">
+                            <div class="card h-100">
+                                {% if movie.poster %}
+                                    <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                                {% else %}
+                                    <div class="card-img-top movie-placeholder-img bg-light text-center py-5">
+                                        <i class="fas fa-film fa-3x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-2">
+                                    <h6 class="card-title text-truncate" title="{{ movie.title }}">{{ movie.title }}</h6>
+                                    <p class="card-text small text-muted mb-0">{{ movie.release_year }}</p>
+                                    <div class="mt-2">
+                                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-sm btn-outline-primary w-100">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted">Your watchlist is empty. Add movies by clicking "Add to Watchlist" on any movie page.</p>
+                        </div>
+                    {% endfor %}
+                    <hr style="color: rgb(192, 192, 192);">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Movies You've Watched -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body">
+                <h2 class="card-title">Movies You've Watched</h2>
+                <div class="row">
+                    {% for movie in watched_movies %}
+                        <div class="col-md-2 mb-3">
+                            <div class="card h-100">
+                                {% if movie.poster %}
+                                    <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                                {% else %}
+                                    <div class="card-img-top movie-placeholder-img bg-light text-center py-5">
+                                        <i class="fas fa-film fa-3x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-2">
+                                    <h6 class="card-title text-truncate" title="{{ movie.title }}">{{ movie.title }}</h6>
+                                    <p class="card-text small text-muted mb-0">{{ movie.release_year }}</p>
+                                    <div class="mt-2">
+                                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-sm btn-outline-primary w-100">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted">You haven't marked any movies as watched yet. Mark movies as watched on any movie page.</p>
+                        </div>
+                    {% endfor %}
+                    <hr style="color: rgb(192, 192, 192);">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Highly Rated Movies -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body">
+                <h2 class="card-title">Recommended for You</h2>
+                <div class="row">
+                    {% for movie in highly_rated %}
+                        <div class="col-md-2 mb-3">
+                            <div class="card h-100">
+                                {% if movie.poster %}
+                                    <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                                {% else %}
+                                    <div class="card-img-top movie-placeholder-img bg-light text-center py-5">
+                                        <i class="fas fa-film fa-3x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-2">
+                                    <h6 class="card-title text-truncate" title="{{ movie.title }}">{{ movie.title }}</h6>
+                                    <p class="card-text small text-muted mb-0">{{ movie.release_year }}</p>
+                                    <div class="mt-2">
+                                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-sm btn-outline-primary w-100">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted">No recommendations available yet. Check back after more movies have been reviewed.</p>
+                        </div>
+                    {% endfor %}
+                    <hr style="color: rgb(192, 192, 192);">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

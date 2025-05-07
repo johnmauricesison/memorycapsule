@@ -1,0 +1,46 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard | Movie Review Site{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body">
+                <h2 class="card-title">Movies You've Reviewed - {{ reviews|length }}</h2>
+                <div class="row">
+                    {% for review in reviews %}
+                        <div class="col-md-3 mb-3">
+                            <div class="card h-100">
+                                {% if review.movie.poster %}
+                                    <img src="{{ review.movie.poster.url }}" class="card-img-top" alt="{{ review.movie.title }}">
+                                {% else %}
+                                    <div class="card-img-top movie-placeholder-img bg-light text-center py-5">
+                                        <i class="fas fa-film fa-3x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-2">
+                                    <h6 class="card-title text-truncate" title="{{ review.movie.title }}">{{ review.movie.title }}</h6>
+                                    <p class="card-text small text-muted">{{ review.created_date|date:"F j, Y" }}</p>
+                                    <p class="card-text small">{{ review.content|truncatechars:100 }}</p>
+                                    <div class="mt-2">
+                                        <a href="{% url 'movie_detail' review.movie.id %}" class="btn btn-sm btn-outline-primary w-18">View Movie</a>
+                                        <a href="{% url 'delete_review' review.id %}" class="btn btn-sm btn-outline-danger w-18">Delete Review</a>  <!-- Delete Button -->
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted">You haven't reviewed any movies yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
